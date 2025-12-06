@@ -18,9 +18,9 @@
       "name": "1d0cafdc",
       "displayName": "Product_Sales_Desc",
       "queryLines": [
-        "SELECT product, SUM(totalPrice) AS tprice\r\n",
+        "SELECT product,quantity,  SUM(totalPrice) AS tprice\r\n",
         "FROM samples.bakehouse.sales_transactions\r\n",
-        "GROUP BY product\r\n",
+        "GROUP BY product, quantity\r\n",
         "ORDER BY tprice DESC"
       ]
     },
@@ -2282,74 +2282,6 @@
       "layout": [
         {
           "widget": {
-            "name": "c4ec5754",
-            "queries": [
-              {
-                "name": "main_query",
-                "query": {
-                  "datasetName": "1d0cafdc",
-                  "fields": [
-                    {
-                      "name": "sum(tprice)",
-                      "expression": "SUM(`tprice`)"
-                    },
-                    {
-                      "name": "product",
-                      "expression": "`product`"
-                    }
-                  ],
-                  "disaggregated": false
-                }
-              }
-            ],
-            "spec": {
-              "version": 3,
-              "widgetType": "bar",
-              "encodings": {
-                "x": {
-                  "fieldName": "sum(tprice)",
-                  "scale": {
-                    "type": "quantitative"
-                  }
-                },
-                "y": {
-                  "fieldName": "product",
-                  "scale": {
-                    "type": "categorical",
-                    "sort": {
-                      "by": "x-reversed"
-                    }
-                  }
-                },
-                "color": {
-                  "fieldName": "sum(tprice)",
-                  "scale": {
-                    "type": "quantitative",
-                    "colorRamp": {
-                      "mode": "scheme",
-                      "scheme": "greenblue"
-                    }
-                  }
-                },
-                "label": {
-                  "show": true
-                }
-              },
-              "frame": {
-                "showTitle": true,
-                "title": "Total Price by Product\nGolden Gate Ginger is our highest selling product 8 years in a row."
-              }
-            }
-          },
-          "position": {
-            "x": 0,
-            "y": 2,
-            "width": 6,
-            "height": 6
-          }
-        },
-        {
-          "widget": {
             "name": "b73adc4e",
             "queries": [
               {
@@ -2469,9 +2401,138 @@
             "width": 6,
             "height": 2
           }
+        },
+        {
+          "widget": {
+            "name": "6b60bfe0",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "239df65f",
+                  "fields": [
+                    {
+                      "name": "sum(totalPrice)",
+                      "expression": "SUM(`totalPrice`)"
+                    },
+                    {
+                      "name": "product",
+                      "expression": "`product`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(totalPrice)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product",
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "sum(totalPrice)",
+                  "scale": {
+                    "type": "quantitative",
+                    "colorRamp": {
+                      "mode": "scheme",
+                      "scheme": "greenblue"
+                    }
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 6
+          }
         }
       ],
       "pageType": "PAGE_TYPE_CANVAS"
+    },
+    {
+      "name": "ed03653b",
+      "displayName": "Global Filters",
+      "layout": [
+        {
+          "widget": {
+            "name": "5b20716a",
+            "queries": [
+              {
+                "name": "dashboards/01f0d0d879ca1524aefac310aaa1b816/datasets/01f0d2af0c5f1f1bbe94a56667bb161b_quantity",
+                "query": {
+                  "datasetName": "239df65f",
+                  "fields": [
+                    {
+                      "name": "min(quantity)",
+                      "expression": "MIN(`quantity`)"
+                    },
+                    {
+                      "name": "max(quantity)",
+                      "expression": "MAX(`quantity`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "range-slider",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "quantity",
+                    "queryName": "dashboards/01f0d0d879ca1524aefac310aaa1b816/datasets/01f0d2af0c5f1f1bbe94a56667bb161b_quantity"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true
+              },
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "INTEGER",
+                    "min": {
+                      "value": "0"
+                    },
+                    "max": {
+                      "value": "100"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS"
     }
   ],
   "uiSettings": {

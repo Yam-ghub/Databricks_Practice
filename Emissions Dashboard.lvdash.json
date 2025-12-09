@@ -39,7 +39,7 @@
     },
     {
       "name": "b608e6c2",
-      "displayName": "Total Emission",
+      "displayName": "Total Emission per state",
       "queryLines": [
         "SELECT state_abbr,\r\n",
         "       SUM(CAST(\r\n",
@@ -49,7 +49,22 @@
         "FROM emissions_data\r\n",
         "GROUP BY state_abbr\r\n",
         "ORDER BY Total_Emission DESC\r\n",
-        "--LIMIT 10"
+        "LIMIT 10"
+      ],
+      "catalog": "emissions",
+      "schema": "default"
+    },
+    {
+      "name": "3ee9b0cc",
+      "displayName": "Total Emissions by mTon C02e",
+      "queryLines": [
+        "SELECT county_state_name,\r\n",
+        "       population,\r\n",
+        "       CAST(\r\n",
+        "         REPLACE(`GHG emissions mtons CO2e`, ',' ,'') AS DOUBLE) AS total_emissions\r\n",
+        "FROM emissions_data\r\n",
+        "ORDER BY total_emissions DESC\r\n",
+        "LIMIT 10"
       ],
       "catalog": "emissions",
       "schema": "default"
@@ -100,7 +115,7 @@
               },
               "frame": {
                 "showTitle": true,
-                "title": "Emission per location"
+                "title": "Emission for US Continent"
               }
             }
           },
@@ -191,6 +206,145 @@
           "position": {
             "x": 3,
             "y": 2,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "7ef6a9ee",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "b608e6c2",
+                  "fields": [
+                    {
+                      "name": "sum(Total_Emission)",
+                      "expression": "SUM(`Total_Emission`)"
+                    },
+                    {
+                      "name": "state_abbr",
+                      "expression": "`state_abbr`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(Total_Emission)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Emission Percentage"
+                },
+                "color": {
+                  "fieldName": "state_abbr",
+                  "legend": {
+                    "hideTitle": false,
+                    "hide": false,
+                    "position": "left",
+                    "title": "State "
+                  },
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Top 10 Highest Emission percentage state in US."
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 3,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "31215b2c",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "3ee9b0cc",
+                  "fields": [
+                    {
+                      "name": "total_emissions",
+                      "expression": "`total_emissions`"
+                    },
+                    {
+                      "name": "county_state_name",
+                      "expression": "`county_state_name`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "total_emissions",
+                  "axis": {
+                    "hideLabels": true,
+                    "hideGrid": true,
+                    "hideTitle": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "county_state_name",
+                  "axis": {
+                    "hideTitle": true,
+                    "hideLabels": false
+                  },
+                  "scale": {
+                    "type": "categorical",
+                    "sort": {
+                      "by": "x-reversed"
+                    }
+                  }
+                },
+                "color": {
+                  "fieldName": "total_emissions",
+                  "legend": {
+                    "hideTitle": true,
+                    "hide": true
+                  },
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Top 10 Highest Emission per County"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 8,
             "width": 3,
             "height": 6
           }
